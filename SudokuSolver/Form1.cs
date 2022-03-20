@@ -37,36 +37,44 @@ namespace SudokuSolver
         
         private void btnSolve_Click(object sender, EventArgs e)
         {
-            lblTime.Text = "Solving...";
-            string[,] input = new string[9, 9];
+            try
+            {
+                lblTime.Text = "Solving...";
+                string[,] input = new string[9, 9];
 
-            for (byte i = 0; i < 9; i++)
-                for (byte j = 0; j < 9; j++)
-                    input[i, j] = grid[i, j].Text;
+                for (byte i = 0; i < 9; i++)
+                    for (byte j = 0; j < 9; j++)
+                        input[i, j] = grid[i, j].Text;
 
-            SudokuGrid sudokuGrid = new SudokuGrid(input);
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
-            sudokuGrid.Solve();
-            stopwatch.Stop();
+                SudokuGrid sudokuGrid = new SudokuGrid(input);
+                Stopwatch stopwatch = new Stopwatch();
+                stopwatch.Start();
+                sudokuGrid.Solve();
+                stopwatch.Stop();
 
-            Font font = new Font(grid[0,0].Font.FontFamily, grid[0, 0].Font.Size, FontStyle.Regular, GraphicsUnit.Point, ((byte)(162)));
+                Font font = new Font(grid[0, 0].Font.FontFamily, grid[0, 0].Font.Size, FontStyle.Regular, GraphicsUnit.Point, ((byte)(162)));
 
-            for (byte i = 0; i < 9; i++)
-                for (byte j = 0; j < 9; j++)
-                {
-                    grid[i, j].ReadOnly = true;
-                    if (string.IsNullOrEmpty(grid[i, j].Text))
+                for (byte i = 0; i < 9; i++)
+                    for (byte j = 0; j < 9; j++)
                     {
-                        grid[i, j].BackColor = Color.White;
-                        grid[i, j].Font = font;
-                        grid[i, j].Text = sudokuGrid[i, j].Digit.ToString();
+                        grid[i, j].ReadOnly = true;
+                        if (string.IsNullOrEmpty(grid[i, j].Text))
+                        {
+                            grid[i, j].BackColor = Color.White;
+                            grid[i, j].Font = font;
+                            grid[i, j].Text = sudokuGrid[i, j].Digit.ToString();
+                        }
+                        else
+                            grid[i, j].BackColor = Color.LightGray;
                     }
-                    else
-                        grid[i, j].BackColor = Color.LightGray;
-                }
 
-            lblTime.Text = "Solution Time:\n" + stopwatch.ElapsedMilliseconds.ToString() + " ms";
+                lblTime.Text = "Solution Time:\n" + stopwatch.ElapsedMilliseconds.ToString() + " ms";
+            }
+            catch(Exception exc)
+            {
+                lblTime.Text = "";
+                MessageBox.Show(exc.Message);
+            }
         }
 
         private void Form1_Load(object sender, EventArgs e)
