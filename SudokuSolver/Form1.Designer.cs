@@ -31,14 +31,14 @@ namespace SudokuSolver
         {
             this.btnSolve = new System.Windows.Forms.Button();
             this.btnClear = new System.Windows.Forms.Button();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.lblTime = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // btnSolve
             // 
-            this.btnSolve.Location = new System.Drawing.Point(461, 136);
+            this.btnSolve.Location = new System.Drawing.Point(0, 0);
             this.btnSolve.Name = "btnSolve";
-            this.btnSolve.Size = new System.Drawing.Size(75, 31);
+            this.btnSolve.Size = new System.Drawing.Size(75, 23);
             this.btnSolve.TabIndex = 81;
             this.btnSolve.Text = "Solve";
             this.btnSolve.UseVisualStyleBackColor = true;
@@ -46,33 +46,33 @@ namespace SudokuSolver
             // 
             // btnClear
             // 
-            this.btnClear.Location = new System.Drawing.Point(461, 191);
+            this.btnClear.Location = new System.Drawing.Point(0, 0);
             this.btnClear.Name = "btnClear";
-            this.btnClear.Size = new System.Drawing.Size(75, 31);
+            this.btnClear.Size = new System.Drawing.Size(75, 23);
             this.btnClear.TabIndex = 82;
             this.btnClear.Text = "Clear";
             this.btnClear.UseVisualStyleBackColor = true;
             this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
             // 
-            // textBox1
+            // lblTime
             // 
-            this.textBox1.Location = new System.Drawing.Point(436, 412);
-            this.textBox1.MaxLength = 1;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(100, 26);
-            this.textBox1.TabIndex = 83;
+            this.lblTime.AutoSize = true;
+            this.lblTime.Location = new System.Drawing.Point(0, 0);
+            this.lblTime.Name = "lblTime";
+            this.lblTime.Size = new System.Drawing.Size(0, 22);
+            this.lblTime.TabIndex = 83;
             // 
             // Form1
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.ClientSize = new System.Drawing.Size(548, 485);
-            this.Controls.Add(this.textBox1);
+            this.ClientSize = new System.Drawing.Size(548, 398);
+            this.Controls.Add(this.lblTime);
             this.Controls.Add(this.btnClear);
             this.Controls.Add(this.btnSolve);
-            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F);
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "Sudoku Solver";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -83,7 +83,7 @@ namespace SudokuSolver
 
         private System.Windows.Forms.Button btnSolve;
         private System.Windows.Forms.Button btnClear;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Label lblTime;
     }
 }
 

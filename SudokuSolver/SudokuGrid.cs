@@ -1,24 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace SudokuSolver
 {
     class SudokuGrid
     {
+        (byte, byte) firstNonFixed = (0, 0);
         public SudokuGrid(string[,] input)
         {
             Grid = new Cell[9, 9];
-
+            bool searching = true;
             for (byte i = 0; i < 9; i++)
                 for (byte j = 0; j < 9; j++)
                 {
                     if (string.IsNullOrEmpty(input[i, j]))
                     {
+                        if (searching)
+                        {
+                            firstNonFixed = (i, j);
+                            searching = false;
+                        }
                         Grid[i, j].Digit = 0;
                         Grid[i, j].Fixed = false;
                     }
@@ -26,6 +27,8 @@ namespace SudokuSolver
                     {
                         Grid[i, j].Digit = Convert.ToByte(input[i, j]);
                         Grid[i, j].Fixed = true;
+                        if (Illegal(i, j, Grid[i, j].Digit))
+                            throw new NoSolutionException();
                     }
                 }
         }
@@ -35,7 +38,6 @@ namespace SudokuSolver
         {
             byte d;
             for (byte i = 0; i < 9; i++)
-            {
                 for (byte j = 0; j < 9;)
                 {
                     if (!Grid[i, j].Fixed)
@@ -43,10 +45,13 @@ namespace SudokuSolver
                         d = Grid[i, j].Digit;
                         do        //Increment the digit until it isn't a repeat of any current digit on the same row, column or region.
                             d++;
-                        while (Illegal(i, j, d));
+                        while (d <= 9 && Illegal(i, j, d));
 
                         if (d > 9)  //Out of options. Clear the cell and go back to the last non-fixed cell.
                         {
+                            if ((i, j) == firstNonFixed)
+                                throw new NoSolutionException(); //If the solver went back to the first non-fixed cell only to run out of digits, then there is no solution
+
                             Grid[i, j].Digit = 0;
 
                             (i, j) = PreviousNonFixed(i, j);
@@ -56,7 +61,6 @@ namespace SudokuSolver
                     }
                     j++; //if d is not over 9 continue to the next cell
                 }
-            }
         }
 
         private bool Illegal(byte i_d, byte j_d, byte d)

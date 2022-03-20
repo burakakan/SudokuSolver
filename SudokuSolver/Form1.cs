@@ -1,34 +1,43 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace SudokuSolver
 {
     public partial class Form1 : Form
     {
+        int pad = 17, cellSize = 40, gap1 = 5, gap2 = 14;
         public Form1()
         {
-            InitializeComponent();
             Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
             Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
+
+            InitializeComponent();
+
+            TileGrid(pad, cellSize, gap1, gap2);
+
+            btnSolve.Location = new Point(grid[0, 8].Right + pad*2, pad);
+            btnSolve.Size = new Size(3 * cellSize, cellSize);
+            btnSolve.Font = new Font("Microsoft Sans Serif", ((float)(cellSize * 52 / 31)) / 4);
+
+            ClientSize = new Size(btnSolve.Right + pad, grid[8, 0].Bottom + pad);
+
+            btnClear.Location = new Point(btnSolve.Location.X, btnSolve.Bottom + gap2);
+            btnClear.Size = btnSolve.Size;
+            btnClear.Font = btnSolve.Font;
+
+            lblTime.Location = new Point(btnClear.Location.X, btnClear.Bottom + gap2);
+            lblTime.Size = new Size(btnSolve.Size.Width, btnSolve.Size.Height * 3);
+            lblTime.Font = new Font("Microsoft Sans Serif", ((float)(cellSize * 6 / 5)) / 4);
         }
         public static TextBox[,] grid = new TextBox[9, 9];
-        private void Form1_Load(object sender, EventArgs e)
-        {
-            TileGrid(35, 4, 11);
-        }
-
+        
         private void btnSolve_Click(object sender, EventArgs e)
         {
+            lblTime.Text = "Solving...";
             string[,] input = new string[9, 9];
 
             for (byte i = 0; i < 9; i++)
@@ -56,23 +65,46 @@ namespace SudokuSolver
                     else
                         grid[i, j].BackColor = Color.LightGray;
                 }
-            MessageBox.Show(stopwatch.ElapsedMilliseconds.ToString());
+
+            lblTime.Text = "Solution Time:\n" + stopwatch.ElapsedMilliseconds.ToString() + " ms";
         }
 
-        private void TileGrid(int _size, int gap1, int gap2)
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            grid[0, 3].Text = "8";
+            grid[0, 5].Text = "1";
+            grid[1, 7].Text = "4";
+            grid[1, 8].Text = "3";
+            grid[2, 0].Text = "5";
+            grid[2, 2].Text = "4";
+            grid[3, 2].Text = "5";
+            grid[3, 4].Text = "7";
+            grid[3, 6].Text = "8";
+            grid[4, 6].Text = "1";
+            grid[5, 1].Text = "2";
+            grid[5, 4].Text = "3";
+            grid[6, 0].Text = "6";
+            grid[6, 7].Text = "7";
+            grid[6, 8].Text = "5";
+            grid[7, 2].Text = "3";
+            grid[7, 3].Text = "4";
+            grid[8, 3].Text = "2";
+            grid[8, 6].Text = "6";
+        }
+
+        private void TileGrid(int pad, int _size, int gap1, int gap2)
         {
             Size size = new Size(_size, _size);
             float fontSize = (_size - 8) / 1.5f;
             Font font = new Font("Microsoft Sans Serif", fontSize, FontStyle.Bold, GraphicsUnit.Point, ((byte)(162)));
             for (int i = 0; i < 9; i++)
-            {
                 for (int j = 0; j < 9; j++)
                 {
                     grid[i, j] = new TextBox()
                     {
                         Multiline = true,
                         Font = font,
-                        Location = new Point(15 + j * _size + j * gap1 + j / 3 * gap2, 15 + i * _size + i * gap1 + i / 3 * gap2),
+                        Location = new Point(pad + j * _size + j * gap1 + j / 3 * gap2, pad + i * _size + i * gap1 + i / 3 * gap2),
                         Size = size,
                         TabIndex = i * 9 + j,
                         TextAlign = HorizontalAlignment.Center,
@@ -81,7 +113,6 @@ namespace SudokuSolver
                     grid[i,j].GotFocus += new EventHandler(cell_OnFocus);
                     Controls.Add(grid[i, j]);
                 }
-            }
         }
         private void cell_OnFocus(object sender, EventArgs e)
         {
@@ -98,6 +129,7 @@ namespace SudokuSolver
                 cell.Clear();
                 cell.BackColor = Color.White;
             }
+            lblTime.Text = "";
         }
     }
 }
